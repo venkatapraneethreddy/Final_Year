@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EventclubApplication<eventclub>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.college.eventclub.EventclubApplication",
+            "projectName": "eventclub",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
