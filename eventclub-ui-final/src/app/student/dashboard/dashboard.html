@@ -1,0 +1,38 @@
+<h2>Available Events</h2>
+<div *ngIf="loading" class="loader"></div>
+<div style="display:flex; gap:20px; margin-bottom:30px;">
+
+  <div class="card" style="flex:1;">
+    <h3>Total Events</h3>
+    <p style="font-size:24px; font-weight:600;">{{ events.length }}</p>
+  </div>
+
+  <div class="card" style="flex:1;">
+    <h3>Registrations</h3>
+    <p style="font-size:24px; font-weight:600;">{{ registeredEventIds?.length || 0 }}</p>
+  </div>
+
+</div>
+
+<p *ngIf="message" class="success-msg">
+  {{ message }}
+</p>
+
+<div *ngFor="let event of events$ | async" class="card">
+
+  <h3>{{ event.title }}</h3>
+  <p>{{ event.description }}</p>
+  <p><strong>Location:</strong> {{ event.location }}</p>
+
+  <button
+    *ngIf="!isRegistered(event.eventId)"
+    (click)="register(event.eventId)"
+    class="btn-primary">
+    Register
+  </button>
+
+  <span *ngIf="isRegistered(event.eventId)" class="badge badge-published">
+    Registered
+  </span>
+
+</div>
