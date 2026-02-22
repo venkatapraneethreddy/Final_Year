@@ -1,0 +1,5 @@
+.sub { color: var(--text-light); margin-bottom: 1rem; }
+.stats-grid { display:grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap:1rem; margin-bottom:1rem; }
+.metric-card p { font-size:2rem; font-weight:700; }
+.badge-pending { background:#e0f2fe; color:#075985; }
+.actions { margin-top: .8rem; }

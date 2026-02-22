@@ -1,45 +1,56 @@
-<h2>My Events</h2>
+<section class="dashboard-header">
+  <h2>Organizer Workspace</h2>
+  <p>Create events, publish them, and monitor revenue + attendance in one place.</p>
+</section>
+
 <div *ngIf="loading" class="loader"></div>
-<div style="display:flex; gap:20px; margin-bottom:30px;">
 
-  <div class="card" style="flex:1;">
+<div class="stats-grid">
+  <article class="card metric-card">
     <h3>Total Events</h3>
-    <p style="font-size:24px; font-weight:600;">{{ events.length }}</p>
-  </div>
-
-  <div class="card" style="flex:1;">
-    <h3>Registrations</h3>
-    <p style="font-size:24px; font-weight:600;">{{ registeredEventIds?.length || 0 }}</p>
-  </div>
-
+    <p>{{ events.length }}</p>
+  </article>
+  <article class="card metric-card">
+    <h3>Published</h3>
+    <p>{{ publishedCount }}</p>
+  </article>
 </div>
 
-<div class="card">
-  <h3>Event Analytics</h3>
-  <canvas id="myChart"></canvas>
-</div>
+<section class="card">
+  <h3>Create Event</h3>
+  <div class="form-grid">
+    <input [(ngModel)]="title" placeholder="Event title" />
+    <input [(ngModel)]="location" placeholder="Location" />
+    <textarea [(ngModel)]="description" placeholder="Describe your event"></textarea>
+    <label class="inline-toggle">
+      <input type="checkbox" [(ngModel)]="paid" /> Paid event
+    </label>
+    <input *ngIf="paid" type="number" [(ngModel)]="fee" placeholder="Fee" />
+    <button class="btn-primary" (click)="createEvent()">Create Draft</button>
+  </div>
+  <p class="msg">{{ message }}</p>
+</section>
 
-<div *ngFor="let event of events" class="card">
+<section class="card" *ngIf="selectedStats">
+  <h3>Event Stats</h3>
+  <p>Total Registrations: <strong>{{ selectedStats.totalRegistrations }}</strong></p>
+  <p>Paid Registrations: <strong>{{ selectedStats.paidRegistrations }}</strong></p>
+  <p>Attendance Marked: <strong>{{ selectedStats.attendanceCount }}</strong></p>
+  <p>Revenue: <strong>₹{{ selectedStats.revenue }}</strong></p>
+</section>
 
+<section class="card" *ngFor="let event of events">
   <h3>{{ event.title }}</h3>
   <p>{{ event.description }}</p>
+  <p><strong>Location:</strong> {{ event.location }}</p>
+  <p><strong>Fee:</strong> {{ event.paid ? ('₹' + event.fee) : 'Free' }}</p>
 
-  <span 
-    class="badge"
-    [ngClass]="{
-      'badge-published': event.status === 'PUBLISHED',
-      'badge-draft': event.status === 'DRAFT'
-    }">
+  <span class="badge" [ngClass]="event.status === 'PUBLISHED' ? 'badge-published' : 'badge-draft'">
     {{ event.status }}
   </span>
 
-  <br><br>
-
-  <button
-    *ngIf="event.status === 'DRAFT'"
-    (click)="publish(event.eventId)"
-    class="btn-success">
-    Publish
-  </button>
-
-</div>
+  <div class="actions">
+    <button *ngIf="event.status === 'DRAFT'" (click)="publish(event.eventId)" class="btn-success">Publish</button>
+    <button class="btn-primary" (click)="viewStats(event.eventId)">View Stats</button>
+  </div>
+</section>

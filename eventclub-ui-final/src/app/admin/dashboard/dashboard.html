@@ -1,34 +1,18 @@
-<h2>Pending Clubs</h2>
+<h2>Admin Approval Queue</h2>
+<p class="sub">Approve clubs to let organizers publish events.</p>
 
-<div style="display:flex; gap:20px; margin-bottom:30px;">
-
-  <div class="card" style="flex:1;">
-    <h3>Total Events</h3>
-    <p style="font-size:24px; font-weight:600;">{{ events.length }}</p>
-  </div>
-
-  <div class="card" style="flex:1;">
-    <h3>Registrations</h3>
-    <p style="font-size:24px; font-weight:600;">{{ registeredEventIds?.length || 0 }}</p>
-  </div>
-
+<div class="stats-grid">
+  <article class="card metric-card">
+    <h3>Pending Clubs</h3>
+    <p>{{ clubs.length }}</p>
+  </article>
 </div>
 
 <div *ngFor="let club of clubs" class="card">
-
   <h3>{{ club.clubName }}</h3>
   <p>{{ club.description }}</p>
-
-  <span class="badge badge-pending">
-    {{ club.status }}
-  </span>
-
-  <br><br>
-
-  <button
-    (click)="approve(club.clubId)"
-    class="btn-success">
-    Approve
-  </button>
-
+  <span class="badge badge-pending">{{ club.status }}</span>
+  <div class="actions">
+    <button (click)="approve(club.clubId)" class="btn-success">Approve</button>
+  </div>
 </div>

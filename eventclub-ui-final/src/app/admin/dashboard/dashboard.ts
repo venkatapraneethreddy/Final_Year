@@ -10,10 +10,8 @@ import { ClubService } from '../../core/services/club.service';
   styleUrl: './dashboard.scss'
 })
 export class DashboardComponent implements OnInit {
-
   clubs: any[] = [];
-  events: any[] = [];
-  registeredEventIds: any[] = [];
+
   constructor(private clubService: ClubService) {}
 
   ngOnInit(): void {
@@ -21,19 +19,15 @@ export class DashboardComponent implements OnInit {
   }
 
   loadClubs() {
-  this.clubService.getPendingClubs().subscribe({
-    next: (res) => {
-      console.log("PENDING CLUBS:", res);   // 🔥 DEBUG
-      this.clubs = res;
-    },
-    error: (err) => console.log("Error:", err)
-  });
-}
+    this.clubService.getPendingClubs().subscribe({
+      next: (res) => (this.clubs = res),
+      error: () => (this.clubs = [])
+    });
+  }
 
   approve(id: number) {
     this.clubService.approveClub(id).subscribe({
       next: () => this.loadClubs()
     });
   }
-
 }

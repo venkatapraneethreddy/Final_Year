@@ -1,48 +1,29 @@
 package com.college.eventclub.controller;
 
+import com.college.eventclub.model.Club;
+import com.college.eventclub.service.InMemoryPlatformService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
-import com.college.eventclub.model.Club;
-import com.college.eventclub.service.ClubService;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+    private final InMemoryPlatformService service;
 
-    private final ClubService clubService;
-
-    public AdminController(ClubService clubService) {
-        this.clubService = clubService;
-    }
-
-    @PutMapping("/clubs/{id}/approve")
-    public ResponseEntity<Club> approveClub(@PathVariable Long id,
-                                            Authentication authentication) {
-
-        // role from JWT
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-
-        if (!isAdmin) {
-            return ResponseEntity.status(403).build();
-        }
-
-        Club approvedClub = clubService.approveClub(id);
-        return ResponseEntity.ok(approvedClub);
+    public AdminController(InMemoryPlatformService service) {
+        this.service = service;
     }
 
     @GetMapping("/clubs/pending")
-public ResponseEntity<?> getPendingClubs(Authentication authentication) {
-
-    boolean isAdmin = authentication.getAuthorities().stream()
-            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
-
-    if (!isAdmin) {
-        return ResponseEntity.status(403).build();
+    public List<Club> pendingClubs() {
+        return service.getPendingClubs();
     }
 
-    return ResponseEntity.ok(clubService.getPendingClubs());
-}
+    @PutMapping("/clubs/{clubId}/approve")
+    public ResponseEntity<Void> approve(@PathVariable Long clubId) {
+        service.approveClub(clubId);
+        return ResponseEntity.ok().build();
+    }
 }
