@@ -1,8 +1,8 @@
-import { Component, OnInit,AfterViewInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { EventService } from '../../core/services/event.service';
-import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-organizer-dashboard',
@@ -11,54 +11,41 @@ import Chart from 'chart.js/auto';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss'
 })
-export class DashboardComponent implements OnInit ,AfterViewInit{
-
+export class DashboardComponent implements OnInit {
   events: any[] = [];
-  registeredEventIds: any[] = [];
   title = '';
   description = '';
   location = '';
   paid = false;
   fee = 0;
-  router: any;
   message = '';
   selectedStats: any = null;
   loading = true;
-  constructor(private eventService: EventService) {}
 
-  ngAfterViewInit(): void {
-    this.createChart();
+  get publishedCount(): number {
+    return this.events.filter((event) => event.status === "PUBLISHED").length;
   }
 
-  createChart() {
-    new Chart('myChart', {
-      type: 'bar',
-      data: {
-        labels: ['Java Event', 'Python Event', 'CPP Event'],
-        datasets: [{
-          label: 'Registrations',
-          data: [12, 19, 7],
-          backgroundColor: '#4f46e5'
-        }]
-      }
-    });
-  }
+  constructor(private eventService: EventService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadEvents();
   }
 
   loadEvents() {
-  this.loading = true;
-  this.eventService.getPublishedEvents().subscribe(res => {
-    this.events = res;
-    this.loading = false;
-  });
-}
+    this.loading = true;
+    this.eventService.getMyEvents().subscribe({
+      next: (res) => {
+        this.events = res;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
+  }
 
   createEvent() {
-    const clubId = 1; // replace later with dynamic logic
-
     const payload = {
       title: this.title,
       description: this.description,
@@ -67,20 +54,27 @@ export class DashboardComponent implements OnInit ,AfterViewInit{
       fee: this.paid ? this.fee : 0
     };
 
-    this.eventService.createEvent(clubId, payload).subscribe({
+    this.eventService.createEvent(1, payload).subscribe({
       next: () => {
-        this.message = "Event created (Draft)";
+        this.message = 'Event created as draft.';
         this.resetForm();
         this.loadEvents();
       },
-      error: () => this.message = "Error creating event"
+      error: () => (this.message = 'Could not create event. Ensure club is approved.')
     });
   }
 
   publish(eventId: number) {
     this.eventService.publishEvent(eventId).subscribe({
       next: () => this.loadEvents(),
-      error: () => alert("Publish failed")
+      error: () => alert('Publish failed')
+    });
+  }
+
+  viewStats(eventId: number) {
+    this.eventService.getEventStats(eventId).subscribe({
+      next: (res) => (this.selectedStats = res),
+      error: () => alert('Failed to load stats')
     });
   }
 
@@ -92,15 +86,8 @@ export class DashboardComponent implements OnInit ,AfterViewInit{
     this.fee = 0;
   }
 
-  viewStats(eventId: number) {
-  this.eventService.getEventStats(eventId).subscribe({
-    next: (res) => this.selectedStats = res,
-    error: () => alert("Failed to load stats")
-  });
-}
-
-logout() {
-  localStorage.clear();
-  this.router.navigate(['/auth/login']);
-}
+  logout() {
+    localStorage.clear();
+    this.router.navigate(['/auth/login']);
+  }
 }

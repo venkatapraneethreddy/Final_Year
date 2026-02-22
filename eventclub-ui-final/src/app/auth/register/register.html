@@ -1,55 +1,33 @@
 <div class="auth-container">
-
   <div class="auth-left">
     <div class="brand">EventClub</div>
     <h1>Create Account 🚀</h1>
-    <p>Join the modern event management platform built for colleges.</p>
+    <p>Join as a student or organizer and manage your entire event lifecycle.</p>
   </div>
 
   <div class="auth-right">
-
     <div class="auth-card">
       <h2>Register</h2>
-
       <form (ngSubmit)="register()">
-
         <label>Full Name</label>
-        <input
-          type="text"
-          [(ngModel)]="fullName"
-          name="fullName"
-          required
-        />
+        <input type="text" [(ngModel)]="fullName" name="fullName" required />
 
         <label>Email</label>
-        <input
-          type="email"
-          [(ngModel)]="email"
-          name="email"
-          required
-        />
+        <input type="email" [(ngModel)]="email" name="email" required />
 
         <label>Password</label>
-        <input
-          type="password"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
+        <input type="password" [(ngModel)]="password" name="password" required />
 
-        <button class="btn-primary" style="width:100%;">
-          Register
-        </button>
+        <label>Sign up as</label>
+        <select [(ngModel)]="role" name="role">
+          <option value="STUDENT">Student</option>
+          <option value="ORGANIZER">Organizer</option>
+        </select>
 
+        <button class="btn-primary" style="width:100%;">Register</button>
       </form>
 
-      <p class="register-link">
-        Already have an account?
-        <a routerLink="/auth/login">Login</a>
-      </p>
-
+      <p class="register-link">Already have an account? <a routerLink="/auth/login">Login</a></p>
     </div>
-
   </div>
-
 </div>

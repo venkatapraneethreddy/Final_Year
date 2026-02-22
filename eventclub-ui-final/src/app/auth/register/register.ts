@@ -15,10 +15,10 @@ import { ToastService } from '../../core/services/toast.service';
   styleUrls: ['./register.scss']
 })
 export class RegisterComponent {
-
   fullName = '';
   email = '';
   password = '';
+  role = 'STUDENT';
 
   constructor(
     private authService: AuthService,
@@ -30,7 +30,8 @@ export class RegisterComponent {
     const payload = {
       fullName: this.fullName,
       email: this.email,
-      password: this.password
+      password: this.password,
+      role: this.role
     };
 
     this.authService.register(payload).subscribe({
