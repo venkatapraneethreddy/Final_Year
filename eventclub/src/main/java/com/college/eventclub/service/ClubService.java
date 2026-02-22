@@ -37,4 +37,8 @@ public class ClubService {
             .toList();
 }
 
+public List<Club> getPendingClubs() {
+    return clubRepository.findByStatus(ClubStatus.PENDING);
+}
+
 }

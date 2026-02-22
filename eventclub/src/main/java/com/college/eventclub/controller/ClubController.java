@@ -34,13 +34,12 @@ public class ClubController {
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         club.setCreatedBy(user);
-
+        System.out.println(authentication.getAuthorities());
         Club savedClub = clubService.createClub(club);
         return new ResponseEntity<>(savedClub, HttpStatus.CREATED);
     }
     @GetMapping
     public ResponseEntity<?> getApprovedClubs() {
         return ResponseEntity.ok(clubService.getApprovedClubs());
-}
-
+    }
 }

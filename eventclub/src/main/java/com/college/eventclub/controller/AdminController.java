@@ -32,4 +32,17 @@ public class AdminController {
         Club approvedClub = clubService.approveClub(id);
         return ResponseEntity.ok(approvedClub);
     }
+
+    @GetMapping("/clubs/pending")
+public ResponseEntity<?> getPendingClubs(Authentication authentication) {
+
+    boolean isAdmin = authentication.getAuthorities().stream()
+            .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN"));
+
+    if (!isAdmin) {
+        return ResponseEntity.status(403).build();
+    }
+
+    return ResponseEntity.ok(clubService.getPendingClubs());
+}
 }
