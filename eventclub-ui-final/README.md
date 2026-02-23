@@ -36,37 +36,6 @@ ng build
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Deploying to Vercel
-
-This repository now includes a `vercel.json` configuration for SPA hosting.
-
-1. Install dependencies and verify a production build:
-
-   ```bash
-   npm install
-   npm run build:prod
-   ```
-
-2. Install the Vercel CLI (one-time):
-
-   ```bash
-   npm install -g vercel
-   ```
-
-3. Deploy:
-
-   ```bash
-   vercel
-   ```
-
-4. Promote to production:
-
-   ```bash
-   npm run deploy:vercel
-   ```
-
-`vercel.json` points Vercel to `dist/eventclub-ui-final/browser` and rewrites all routes to `index.html` so Angular client-side routing works.
-
 ## Running unit tests
 
 To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
