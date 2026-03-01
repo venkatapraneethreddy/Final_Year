@@ -1,0 +1,117 @@
+<!-- Loading -->
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading event details...</p>
+</div>
+
+<!-- Not Found -->
+<div class="not-found card" *ngIf="notFound">
+  <div class="icon">🔍</div>
+  <h2>Event Not Found</h2>
+  <p>This event may have been removed or is no longer available.</p>
+  <button class="btn-back" (click)="goBack()">← Back to Events</button>
+</div>
+
+<!-- Event Detail -->
+<div class="event-detail" *ngIf="!loading && event">
+
+  <!-- Back nav -->
+  <button class="btn-back-nav" (click)="goBack()">← Back to Events</button>
+
+  <div class="detail-grid">
+
+    <!-- Left: Main info -->
+    <div class="main-info">
+
+      <div class="event-top">
+        <div class="badges">
+          <span class="fee-badge" [ngClass]="event.paid ? 'paid' : 'free'">
+            {{ event.paid ? '₹' + event.fee : 'Free' }}
+          </span>
+          <span class="past-badge" *ngIf="isPastEvent()">Event Ended</span>
+        </div>
+        <h1>{{ event.title }}</h1>
+        <p class="club-name" *ngIf="event.club?.clubName">
+          🏛️ Organized by <strong>{{ event.club.clubName }}</strong>
+        </p>
+      </div>
+
+      <div class="section">
+        <h3>About This Event</h3>
+        <p class="description">{{ event.description || 'No description provided.' }}</p>
+      </div>
+
+    </div>
+
+    <!-- Right: Info card + Register -->
+    <div class="side-info">
+
+      <div class="card info-card">
+
+        <div class="info-row">
+          <span class="info-icon">🗓️</span>
+          <div>
+            <div class="info-label">Date & Time</div>
+            <div class="info-value">{{ formatDate(event.eventDate) }}</div>
+          </div>
+        </div>
+
+        <div class="info-row">
+          <span class="info-icon">📍</span>
+          <div>
+            <div class="info-label">Location</div>
+            <div class="info-value">{{ event.location || 'To be announced' }}</div>
+          </div>
+        </div>
+
+        <div class="info-row" *ngIf="event.capacity">
+          <span class="info-icon">👥</span>
+          <div>
+            <div class="info-label">Capacity</div>
+            <div class="info-value">{{ event.capacity }} seats</div>
+          </div>
+        </div>
+
+        <div class="info-row" *ngIf="event.paid">
+          <span class="info-icon">💰</span>
+          <div>
+            <div class="info-label">Registration Fee</div>
+            <div class="info-value fee-amount">₹{{ event.fee }}</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- Register button states -->
+        <button
+          class="btn-register"
+          *ngIf="!alreadyRegistered && !isPastEvent()"
+          [disabled]="registering"
+          (click)="register()"
+        >
+          {{ registering ? 'Registering...' : event.paid ? 'Register & Pay ₹' + event.fee : 'Register Now — Free' }}
+        </button>
+
+        <div class="registered-state" *ngIf="alreadyRegistered">
+          <span class="check-icon">✓</span>
+          <div>
+            <strong>You're Registered!</strong>
+            <p>Check My Registrations for your ticket.</p>
+          </div>
+        </div>
+
+        <div class="past-state" *ngIf="isPastEvent() && !alreadyRegistered">
+          <span>This event has ended and is no longer accepting registrations.</span>
+        </div>
+
+        <a routerLink="/student/my-registrations" class="view-ticket-link" *ngIf="alreadyRegistered">
+          🎫 View My Ticket →
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

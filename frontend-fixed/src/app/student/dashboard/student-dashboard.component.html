@@ -1,0 +1,101 @@
+<div class="dashboard-header">
+  <h1>Explore Events</h1>
+  <p>Discover and register for exciting college events.</p>
+</div>
+
+<!-- Search & Filter Bar -->
+<div class="filter-bar" *ngIf="!loading">
+  <input
+    type="text"
+    placeholder="🔍 Search events, clubs, locations..."
+    [(ngModel)]="searchTerm"
+    (ngModelChange)="applyFilter()"
+    class="search-input"
+  />
+  <div class="filter-tabs">
+    <button [class.active]="filterType === 'all'" (click)="filterType='all'; applyFilter()">All</button>
+    <button [class.active]="filterType === 'free'" (click)="filterType='free'; applyFilter()">Free</button>
+    <button [class.active]="filterType === 'paid'" (click)="filterType='paid'; applyFilter()">Paid</button>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading events...</p>
+</div>
+
+<!-- Empty State -->
+<div class="empty-state card" *ngIf="!loading && filteredEvents.length === 0">
+  <div class="empty-icon">📭</div>
+  <h3>No Events Found</h3>
+  <p *ngIf="searchTerm">Try a different search term.</p>
+  <p *ngIf="!searchTerm">Check back soon for upcoming events.</p>
+</div>
+
+<!-- Feature 8: Upcoming events section -->
+<ng-container *ngIf="!loading && upcomingEvents.length > 0">
+  <h2 class="section-title">🗓️ Upcoming Events</h2>
+  <div class="events-grid">
+    <div class="card event-card" *ngFor="let event of upcomingEvents">
+      <a class="event-link" [routerLink]="['/student/event', event.eventId]">
+        <div class="event-header">
+          <h3>{{ event.title }}</h3>
+          <span class="fee-badge" [ngClass]="event.paid ? 'paid' : 'free'">
+            {{ event.paid ? '₹' + event.fee : 'Free' }}
+          </span>
+        </div>
+        <p class="description">{{ event.description }}</p>
+        <div class="event-meta">
+          <span>📍 {{ event.location || 'TBA' }}</span>
+          <span>🗓️ {{ formatDate(event.eventDate) }}</span>
+          <span *ngIf="event.capacity">👥 {{ event.capacity }} seats</span>
+          <span *ngIf="event.club?.clubName">🏛️ {{ event.club.clubName }}</span>
+        </div>
+      </a>
+      <button
+        class="btn-primary"
+        *ngIf="!registeredEventIds.has(event.eventId)"
+        [disabled]="registering.has(event.eventId)"
+        (click)="register(event.eventId)">
+        {{ registering.has(event.eventId) ? 'Registering...' : 'Register Now' }}
+      </button>
+      <button class="btn-registered" disabled *ngIf="registeredEventIds.has(event.eventId)">
+        ✓ Registered
+      </button>
+    </div>
+  </div>
+</ng-container>
+
+<!-- Feature 8: Past events section — collapsed, greyed out -->
+<ng-container *ngIf="!loading && pastEvents.length > 0">
+  <div class="section-title-row">
+    <h2 class="section-title muted">⏮️ Past Events</h2>
+    <button class="toggle-past" (click)="showPast = !showPast">
+      {{ showPast ? 'Hide' : 'Show ' + pastEvents.length }}
+    </button>
+  </div>
+
+  <div class="events-grid past-grid" *ngIf="showPast">
+    <div class="card event-card past" *ngFor="let event of pastEvents">
+      <a class="event-link" [routerLink]="['/student/event', event.eventId]">
+        <div class="event-header">
+          <h3>{{ event.title }}</h3>
+          <span class="past-badge">Ended</span>
+        </div>
+        <p class="description">{{ event.description }}</p>
+        <div class="event-meta">
+          <span>📍 {{ event.location || 'TBA' }}</span>
+          <span>🗓️ {{ formatDate(event.eventDate) }}</span>
+          <span *ngIf="event.club?.clubName">🏛️ {{ event.club.clubName }}</span>
+        </div>
+      </a>
+      <button class="btn-registered" disabled *ngIf="registeredEventIds.has(event.eventId)">
+        ✓ Attended
+      </button>
+      <button class="btn-ended" disabled *ngIf="!registeredEventIds.has(event.eventId)">
+        Registration Closed
+      </button>
+    </div>
+  </div>
+</ng-container>

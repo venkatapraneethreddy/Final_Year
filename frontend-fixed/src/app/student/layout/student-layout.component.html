@@ -1,0 +1,25 @@
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">EventClub</div>
+
+    <nav>
+      <a routerLink="/student" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">
+        🏠 Dashboard
+      </a>
+      <a routerLink="/student/my-registrations" routerLinkActive="active">
+        🎟️ My Registrations
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="user-name">{{ fullName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

@@ -1,0 +1,51 @@
+<div class="dashboard-header">
+  <h1>Club Approvals</h1>
+  <p>Review and approve or reject new club requests.</p>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+</div>
+
+<div class="empty-state card" *ngIf="!loading && clubs.length === 0">
+  <div class="empty-icon">✅</div>
+  <h3>All Caught Up!</h3>
+  <p>No pending club requests at the moment.</p>
+</div>
+
+<div class="clubs-grid" *ngIf="!loading && clubs.length > 0">
+
+  <div class="card club-card" *ngFor="let club of clubs">
+
+    <div class="club-header">
+      <h3>{{ club.clubName }}</h3>
+      <span class="pending-badge">Pending</span>
+    </div>
+
+    <p class="description">{{ club.description }}</p>
+
+    <div class="club-meta">
+      <span>👤 {{ club.createdBy?.fullName || 'Unknown' }}</span>
+      <span>📧 {{ club.createdBy?.email }}</span>
+    </div>
+
+    <div class="club-actions">
+      <button
+        class="btn-approve"
+        (click)="approve(club.clubId)"
+        [disabled]="processingId === club.clubId"
+      >
+        {{ processingId === club.clubId ? '...' : '✓ Approve' }}
+      </button>
+      <button
+        class="btn-reject"
+        (click)="reject(club.clubId)"
+        [disabled]="processingId === club.clubId"
+      >
+        {{ processingId === club.clubId ? '...' : '✕ Reject' }}
+      </button>
+    </div>
+
+  </div>
+
+</div>

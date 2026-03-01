@@ -1,0 +1,13 @@
+.dashboard-header { margin-bottom: 24px; h1{font-size:24px;font-weight:700;} p{color:#6b7280;margin-top:4px;} }
+.loading-state{display:flex;justify-content:center;padding:60px; .spinner{width:36px;height:36px;border:3px solid #e5e7eb;border-top-color:#3b5bff;border-radius:50%;animation:spin 0.7s linear infinite;}}
+@keyframes spin{to{transform:rotate(360deg);}}
+.empty-state{text-align:center;padding:60px; .empty-icon{font-size:40px;margin-bottom:16px;} h3{font-size:18px;margin-bottom:8px;} p{color:#6b7280;}}
+.clubs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
+.club-card{display:flex;flex-direction:column;gap:12px;}
+.club-header{display:flex;justify-content:space-between;align-items:center; h3{font-size:16px;font-weight:600;}}
+.pending-badge{padding:4px 10px;background:#fef9c3;color:#854d0e;border-radius:20px;font-size:12px;font-weight:600;}
+.description{color:#6b7280;font-size:14px;line-height:1.5;}
+.club-meta{display:flex;flex-direction:column;gap:4px;font-size:13px;color:#6b7280;}
+.club-actions{display:flex;gap:8px;margin-top:auto;}
+.btn-approve{flex:1;padding:9px;background:#16a34a;color:white;border:none;border-radius:8px;font-weight:600;cursor:pointer; &:hover:not(:disabled){background:#15803d;} &:disabled{opacity:0.5;cursor:not-allowed;}}
+.btn-reject{flex:1;padding:9px;background:white;color:#dc2626;border:1.5px solid #fecaca;border-radius:8px;font-weight:600;cursor:pointer; &:hover:not(:disabled){background:#fef2f2;} &:disabled{opacity:0.5;cursor:not-allowed;}}

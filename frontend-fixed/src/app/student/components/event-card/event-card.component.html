@@ -1,0 +1,23 @@
+<div class="event-card">
+
+  <h4>{{ event?.title || 'Untitled Event' }}</h4>
+
+  <p class="club">
+    {{ event?.club?.clubName || 'Unknown Club' }}
+  </p>
+
+  <p class="date">
+    {{ event?.eventDate || 'Date TBA' }}
+  </p>
+
+  <button
+  (click)="register()"
+  [disabled]="registering || alreadyRegistered">
+
+  <span *ngIf="alreadyRegistered">Already Registered ✓</span>
+  <span *ngIf="!alreadyRegistered && !registering">Register</span>
+  <span *ngIf="registering">Registering...</span>
+
+</button>
+
+</div>

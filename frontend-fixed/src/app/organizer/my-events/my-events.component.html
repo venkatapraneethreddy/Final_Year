@@ -1,0 +1,74 @@
+<div class="dashboard-header">
+  <h1>My Events</h1>
+  <p>Manage and publish your club events.</p>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+</div>
+
+<div class="empty-state card" *ngIf="!loading && events.length === 0">
+  <div class="empty-icon">📋</div>
+  <h3>No Events Yet</h3>
+  <p>Create your first event to get started.</p>
+  <a routerLink="/organizer/create-event" class="btn-primary">Create Event</a>
+</div>
+
+<div class="events-grid" *ngIf="!loading && events.length > 0">
+
+  <div class="card event-card" *ngFor="let event of events">
+
+    <div class="event-header">
+      <h3>{{ event.title }}</h3>
+      <span class="status-badge"
+        [ngClass]="{
+          draft: event.status === 'DRAFT',
+          published: event.status === 'PUBLISHED',
+          cancelled: event.status === 'CANCELLED'
+        }">
+        {{ event.status }}
+      </span>
+    </div>
+
+    <p class="description">{{ event.description }}</p>
+
+    <div class="event-meta">
+      <span>📍 {{ event.location || 'TBA' }}</span>
+      <span>🗓️ {{ formatDate(event.eventDate) }}</span>
+      <span>👥 Capacity: {{ event.capacity || 'Unlimited' }}</span>
+      <span *ngIf="event.paid">💰 ₹{{ event.fee }}</span>
+      <span *ngIf="!event.paid">🆓 Free</span>
+    </div>
+
+    <div class="event-actions">
+      <button
+        *ngIf="event.status === 'DRAFT'"
+        class="btn-publish"
+        (click)="publish(event.eventId)"
+        [disabled]="publishing.has(event.eventId)"
+      >
+        {{ publishing.has(event.eventId) ? 'Publishing...' : '🚀 Publish' }}
+      </button>
+
+      <!-- Feature 5: view registrants link -->
+      <a
+        *ngIf="event.status === 'PUBLISHED'"
+        [routerLink]="['/organizer/event', event.eventId, 'registrants']"
+        class="btn-registrants"
+      >
+        👥 Registrants
+      </a>
+
+      <button
+        *ngIf="event.status !== 'CANCELLED'"
+        class="btn-cancel"
+        (click)="cancelEvent(event.eventId)"
+        [disabled]="cancelling.has(event.eventId)"
+      >
+        {{ cancelling.has(event.eventId) ? 'Cancelling...' : 'Cancel' }}
+      </button>
+    </div>
+
+  </div>
+
+</div>

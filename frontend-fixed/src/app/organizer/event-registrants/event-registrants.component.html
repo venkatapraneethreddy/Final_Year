@@ -1,0 +1,85 @@
+<button class="btn-back-nav" (click)="goBack()">← Back to My Events</button>
+
+<div class="page-header">
+  <h1>Registrants</h1>
+  <p>All students registered for this event.</p>
+</div>
+
+<!-- Loading -->
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading registrants...</p>
+</div>
+
+<ng-container *ngIf="!loading">
+
+  <!-- Summary cards -->
+  <div class="summary-row">
+    <div class="card summary-card">
+      <div class="summary-number">{{ registrants.length }}</div>
+      <div class="summary-label">Total Registered</div>
+    </div>
+    <div class="card summary-card confirmed">
+      <div class="summary-number">{{ confirmedCount }}</div>
+      <div class="summary-label">Confirmed</div>
+    </div>
+    <div class="card summary-card pending">
+      <div class="summary-number">{{ pendingCount }}</div>
+      <div class="summary-label">Pending Payment</div>
+    </div>
+  </div>
+
+  <!-- Empty -->
+  <div class="card empty-state" *ngIf="registrants.length === 0">
+    <div class="empty-icon">👥</div>
+    <h3>No Registrations Yet</h3>
+    <p>Students haven't registered for this event yet.</p>
+  </div>
+
+  <!-- Search + Table -->
+  <div class="card table-card" *ngIf="registrants.length > 0">
+
+    <div class="table-header">
+      <input
+        type="text"
+        placeholder="🔍 Search by name or email..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applySearch()"
+        class="search-input"
+      />
+      <span class="result-count">{{ filteredRegistrants.length }} of {{ registrants.length }}</span>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Registered At</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reg of filteredRegistrants; let i = index">
+            <td class="row-num">{{ i + 1 }}</td>
+            <td class="student-name">{{ reg.studentName }}</td>
+            <td class="student-email">{{ reg.studentEmail }}</td>
+            <td>{{ formatDate(reg.registeredAt) }}</td>
+            <td>
+              <span class="status-pill confirmed" *ngIf="reg.status === 'CONFIRMED'">✓ Confirmed</span>
+              <span class="status-pill pending" *ngIf="reg.status === 'PENDING_PAYMENT'">⏳ Pending</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-results" *ngIf="filteredRegistrants.length === 0 && searchTerm">
+      No registrants match "{{ searchTerm }}"
+    </div>
+
+  </div>
+
+</ng-container>

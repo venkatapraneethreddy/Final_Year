@@ -1,0 +1,90 @@
+<div class="page-header">
+  <h1>User Management</h1>
+  <p>View and manage all registered users.</p>
+</div>
+
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading users...</p>
+</div>
+
+<ng-container *ngIf="!loading">
+
+  <!-- Summary cards -->
+  <div class="summary-row">
+    <div class="card summary-card total" (click)="roleFilter='ALL'; applyFilter()" [class.active]="roleFilter==='ALL'">
+      <div class="summary-number">{{ users.length }}</div>
+      <div class="summary-label">Total Users</div>
+    </div>
+    <div class="card summary-card" (click)="roleFilter='STUDENT'; applyFilter()" [class.active]="roleFilter==='STUDENT'">
+      <div class="summary-number">{{ studentCount }}</div>
+      <div class="summary-label">Students</div>
+    </div>
+    <div class="card summary-card organizer" (click)="roleFilter='ORGANIZER'; applyFilter()" [class.active]="roleFilter==='ORGANIZER'">
+      <div class="summary-number">{{ organizerCount }}</div>
+      <div class="summary-label">Organizers</div>
+    </div>
+    <div class="card summary-card admin" (click)="roleFilter='ADMIN'; applyFilter()" [class.active]="roleFilter==='ADMIN'">
+      <div class="summary-number">{{ adminCount }}</div>
+      <div class="summary-label">Admins</div>
+    </div>
+  </div>
+
+  <!-- Table card -->
+  <div class="card table-card">
+
+    <div class="table-header">
+      <input
+        type="text"
+        placeholder="🔍 Search by name or email..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="applyFilter()"
+        class="search-input"
+      />
+      <span class="result-count">{{ filteredUsers.length }} of {{ users.length }} users</span>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filteredUsers; let i = index">
+            <td class="row-num">{{ i + 1 }}</td>
+            <td class="user-name">{{ user.fullName }}</td>
+            <td class="user-email">{{ user.email }}</td>
+            <td>
+              <span class="role-pill" [ngClass]="user.role.toLowerCase()">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn-delete"
+                *ngIf="user.role !== 'ADMIN'"
+                (click)="deleteUser(user.userId, user.fullName)"
+                [disabled]="deletingId === user.userId"
+              >
+                {{ deletingId === user.userId ? '...' : 'Delete' }}
+              </button>
+              <span class="protected-label" *ngIf="user.role === 'ADMIN'">Protected</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="no-results" *ngIf="filteredUsers.length === 0">
+      No users match your search.
+    </div>
+
+  </div>
+
+</ng-container>

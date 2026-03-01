@@ -1,0 +1,93 @@
+<div class="page-header">
+  <h1>QR Check-In Scanner</h1>
+  <p>Scan student QR codes to mark attendance at your event.</p>
+</div>
+
+<div class="scanner-layout">
+
+  <!-- Left: Camera / Scanner -->
+  <div class="scanner-panel card">
+
+    <h3>Camera Scanner</h3>
+
+    <!-- Not scanning -->
+    <div class="camera-placeholder" *ngIf="!scanning">
+      <div class="camera-icon">📷</div>
+      <p>Click Start Scanner to begin scanning QR codes</p>
+      <button class="btn-start" (click)="startCamera()">Start Scanner</button>
+    </div>
+
+    <!-- Camera error -->
+    <div class="camera-error" *ngIf="cameraError && !scanning">
+      <span>⚠️ {{ cameraError }}</span>
+    </div>
+
+    <!-- Video feed -->
+    <div class="video-wrapper" *ngIf="scanning">
+      <video id="scanner-video" playsinline autoplay muted class="scanner-video"></video>
+      <div class="scan-overlay">
+        <div class="scan-frame"></div>
+        <span class="scan-hint">Point at a student's QR code</span>
+      </div>
+      <button class="btn-stop" (click)="stopCamera()">Stop Scanner</button>
+    </div>
+
+  </div>
+
+  <!-- Right: Manual entry + Result -->
+  <div class="right-panel">
+
+    <!-- Manual entry -->
+    <div class="card manual-card">
+      <h3>Manual Entry</h3>
+      <p class="subtitle">Paste or type the QR code string if camera isn't available.</p>
+      <div class="manual-input-row">
+        <input
+          type="text"
+          placeholder="Enter QR code..."
+          [(ngModel)]="manualCode"
+          (keyup.enter)="submitManual()"
+          class="manual-input"
+        />
+        <button class="btn-submit-manual" (click)="submitManual()" [disabled]="submittingManual || !manualCode.trim()">
+          {{ submittingManual ? '...' : 'Check In' }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Result card -->
+    <div class="card result-card success-card" *ngIf="resultType === 'success'">
+      <div class="result-icon">✅</div>
+      <div class="result-body">
+        <strong>Check-In Successful</strong>
+        <p>{{ resultMessage }}</p>
+        <div class="result-details" *ngIf="lastResult">
+          <span>🕐 {{ formatDate(lastResult.checkInTime) }}</span>
+        </div>
+      </div>
+      <button class="btn-clear" (click)="clearResult()">✕</button>
+    </div>
+
+    <div class="card result-card error-card" *ngIf="resultType === 'error'">
+      <div class="result-icon">❌</div>
+      <div class="result-body">
+        <strong>Check-In Failed</strong>
+        <p>{{ resultMessage }}</p>
+      </div>
+      <button class="btn-clear" (click)="clearResult()">✕</button>
+    </div>
+
+    <!-- Tips -->
+    <div class="card tips-card">
+      <h4>📋 Tips</h4>
+      <ul>
+        <li>Students must show their e-ticket QR code from the My Registrations page</li>
+        <li>Each QR code can only be scanned once</li>
+        <li>Only confirmed (paid) registrations can be checked in</li>
+        <li>Use manual entry if the camera doesn't work on your device</li>
+      </ul>
+    </div>
+
+  </div>
+
+</div>

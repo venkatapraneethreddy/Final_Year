@@ -1,0 +1,27 @@
+.event-card {
+  background: white;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+  max-width: 420px;
+}
+
+.club {
+  color: #6b7280;
+}
+
+.date {
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #3b5bff;
+  color: white;
+  cursor: pointer;
+}

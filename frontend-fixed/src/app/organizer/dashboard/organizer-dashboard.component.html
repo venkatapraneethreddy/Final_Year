@@ -1,0 +1,43 @@
+<div *ngIf="loading" class="card">
+  Loading dashboard...
+</div>
+
+<div *ngIf="!loading">
+
+  <!-- Welcome Header -->
+  <div class="dashboard-header">
+    <h1>Organizer Dashboard</h1>
+    <p>Manage your club and events easily.</p>
+  </div>
+
+  <!-- If No Club -->
+  <div *ngIf="club === null" class="card empty-state">
+    <h3>No Club Created Yet</h3>
+    <p>You need to create a club before managing events.</p>
+    <a routerLink="/organizer/create-club" class="btn-primary">
+      Create Club
+    </a>
+  </div>
+
+  <!-- If Club Exists -->
+  <div *ngIf="club !== null">
+
+    <div class="card club-info">
+      <h3>{{ club.clubName }}</h3>
+      <p>Status: <strong>{{ club.status }}</strong></p>
+      <p>{{ club.description }}</p>
+    </div>
+
+    <div class="quick-actions">
+      <a routerLink="/organizer/create-event" class="card action-card">
+        ➕ Create New Event
+      </a>
+
+      <a routerLink="/organizer/my-events" class="card action-card">
+        📋 View My Events
+      </a>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">EventClub</div>
+
+    <nav>
+      <a routerLink="/organizer/dashboard" routerLinkActive="active">📊 Dashboard</a>
+      <a routerLink="/organizer/create-event" routerLinkActive="active">➕ Create Event</a>
+      <a routerLink="/organizer/my-events" routerLinkActive="active">📋 My Events</a>
+      <a routerLink="/organizer/qr-scanner" routerLinkActive="active">📷 QR Scanner</a>
+      <a routerLink="/organizer/analytics" routerLinkActive="active">📈 Analytics</a>
+      <a routerLink="/organizer/create-club" routerLinkActive="active">🏛️ Create Club</a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <span class="user-name">{{ fullName }}</span>
+      <button class="logout-btn" (click)="logout()">Logout</button>
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet></router-outlet>
+  </main>
+
+</div>

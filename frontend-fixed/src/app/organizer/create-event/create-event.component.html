@@ -1,0 +1,73 @@
+<div class="card form-card">
+
+  <h2>Create New Event</h2>
+  <p class="subtitle">Fill in the details to create your event.</p>
+
+  <!-- Club not approved warning -->
+  <div class="warning-msg" *ngIf="!clubLoading && clubStatus !== 'APPROVED'">
+    ⚠️ Your club is <strong>{{ clubStatus || 'not set up' }}</strong>. Events can only be created for approved clubs.
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="!clubLoading">
+
+    <div class="form-group">
+      <label>Event Title *</label>
+      <input type="text" formControlName="title" placeholder="e.g. Annual Tech Fest" />
+      <span class="field-error" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+        Title must be at least 3 characters
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label>Description *</label>
+      <textarea formControlName="description" rows="3" placeholder="Describe your event..."></textarea>
+      <span class="field-error" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">
+        Description is required
+      </span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Location *</label>
+        <input type="text" formControlName="location" placeholder="e.g. Auditorium A" />
+      </div>
+      <div class="form-group">
+        <label>Date & Time *</label>
+        <input type="datetime-local" formControlName="eventDate" />
+        <span class="field-error" *ngIf="form.get('eventDate')?.invalid && form.get('eventDate')?.touched">
+          Date is required
+        </span>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Capacity *</label>
+        <input type="number" formControlName="capacity" placeholder="Max attendees" min="1" />
+        <span class="field-error" *ngIf="form.get('capacity')?.invalid && form.get('capacity')?.touched">
+          Capacity must be at least 1
+        </span>
+      </div>
+      <div class="form-group">
+        <label>Fee (₹)</label>
+        <input type="number" formControlName="fee" placeholder="0" min="0" />
+      </div>
+    </div>
+
+    <div class="form-group checkbox-group">
+      <input type="checkbox" id="paid" formControlName="paid" />
+      <label for="paid">This is a paid event</label>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-secondary" (click)="goToMyEvents()">
+        Cancel
+      </button>
+      <button type="submit" class="btn-primary" [disabled]="loading || clubStatus !== 'APPROVED'">
+        {{ loading ? 'Creating...' : 'Create Event' }}
+      </button>
+    </div>
+
+  </form>
+
+</div>

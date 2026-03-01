@@ -1,0 +1,123 @@
+.page-header { margin-bottom: 24px;
+  h1 { font-size: 24px; font-weight: 700; }
+  p { color: #6b7280; margin-top: 4px; }
+}
+
+.scanner-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  align-items: start;
+  @media (max-width: 860px) { grid-template-columns: 1fr; }
+}
+
+/* Scanner panel */
+.scanner-panel { padding: 24px;
+  h3 { font-size: 16px; font-weight: 600; margin-bottom: 20px; }
+}
+
+.camera-placeholder {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 60px 20px; text-align: center; gap: 12px;
+  border: 2px dashed #e5e7eb; border-radius: 12px;
+  .camera-icon { font-size: 48px; }
+  p { color: #6b7280; font-size: 14px; }
+}
+
+.camera-error {
+  background: #fffbeb; border: 1px solid #fcd34d; color: #92400e;
+  padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-top: 12px;
+}
+
+.video-wrapper { position: relative; }
+
+.scanner-video {
+  width: 100%; border-radius: 12px; background: #000; display: block;
+  max-height: 400px; object-fit: cover;
+}
+
+.scan-overlay {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 12px; pointer-events: none;
+}
+
+.scan-frame {
+  width: 200px; height: 200px;
+  border: 3px solid #3b5bff; border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.4);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { border-color: #3b5bff; }
+  50% { border-color: #60a5fa; }
+}
+
+.scan-hint {
+  background: rgba(0,0,0,0.6); color: white; padding: 6px 14px;
+  border-radius: 20px; font-size: 13px;
+}
+
+.btn-start {
+  padding: 11px 28px; background: #3b5bff; color: white; border: none;
+  border-radius: 10px; font-weight: 600; font-size: 15px; cursor: pointer;
+  &:hover { background: #2f4fd4; }
+}
+
+.btn-stop {
+  display: block; width: 100%; margin-top: 12px; padding: 10px;
+  background: white; color: #ef4444; border: 1.5px solid #fecaca;
+  border-radius: 8px; font-weight: 600; cursor: pointer;
+  &:hover { background: #fef2f2; }
+}
+
+/* Right panel */
+.right-panel { display: flex; flex-direction: column; gap: 16px; }
+
+.manual-card {
+  h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .subtitle { color: #6b7280; font-size: 13px; margin-bottom: 14px; }
+}
+
+.manual-input-row { display: flex; gap: 8px; }
+
+.manual-input {
+  flex: 1; padding: 10px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 14px;
+  &:focus { outline: none; border-color: #3b5bff; }
+}
+
+.btn-submit-manual {
+  padding: 10px 18px; background: #3b5bff; color: white; border: none;
+  border-radius: 8px; font-weight: 600; cursor: pointer; white-space: nowrap;
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+  &:hover:not(:disabled) { background: #2f4fd4; }
+}
+
+/* Result cards */
+.result-card {
+  display: flex; align-items: flex-start; gap: 14px; position: relative; padding: 20px;
+  .result-icon { font-size: 28px; flex-shrink: 0; }
+  .result-body {
+    flex: 1;
+    strong { display: block; font-size: 15px; margin-bottom: 4px; }
+    p { font-size: 13px; margin: 0; }
+    .result-details { margin-top: 8px; font-size: 12px; color: #6b7280; }
+  }
+}
+
+.success-card { background: #f0fdf4; border: 1px solid #bbf7d0; }
+.error-card { background: #fef2f2; border: 1px solid #fecaca; }
+
+.btn-clear {
+  position: absolute; top: 12px; right: 12px; background: none; border: none;
+  color: #9ca3af; cursor: pointer; font-size: 14px;
+  &:hover { color: #6b7280; }
+}
+
+/* Tips */
+.tips-card {
+  h4 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+  ul { padding-left: 16px; display: flex; flex-direction: column; gap: 6px;
+    li { font-size: 13px; color: #6b7280; line-height: 1.5; }
+  }
+}

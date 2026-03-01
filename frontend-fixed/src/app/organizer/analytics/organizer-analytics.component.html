@@ -1,0 +1,30 @@
+<div class="dashboard-header">
+  <h1>Organizer Analytics</h1>
+  <p>Track your event performance</p>
+</div>
+
+<div *ngIf="loading" class="card">
+  Loading analytics...
+</div>
+
+<div class="stats-grid" *ngIf="!loading">
+
+  <div class="card stat-card">
+    <h3>Total Events</h3>
+    <p>{{ stats.totalEvents }}</p>
+  </div>
+
+  <div class="card stat-card">
+    <h3>Total Registrations</h3>
+    <p>{{ stats.totalRegistrations }}</p>
+  </div>
+
+</div>
+
+<div class="card chart-card" *ngIf="!loading">
+  <h3>Registrations per Event</h3>
+  <canvas baseChart
+    [data]="barChartData"
+    chartType="bar">
+  </canvas>
+</div>

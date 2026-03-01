@@ -1,0 +1,58 @@
+<div class="dashboard-header">
+  <h1>Admin Dashboard</h1>
+  <p>System overview and analytics</p>
+</div>
+
+<div *ngIf="loading" class="card">
+  Loading statistics...
+</div>
+
+<div class="stats-grid" *ngIf="!loading">
+
+  <div class="card stat-card">
+    <h3>Total Users</h3>
+    <p>{{ stats.totalUsers }}</p>
+  </div>
+
+  <div class="card stat-card">
+    <h3>Total Clubs</h3>
+    <p>{{ stats.totalClubs }}</p>
+  </div>
+
+  <div class="card stat-card pending">
+    <h3>Pending Clubs</h3>
+    <p>{{ stats.pendingClubs }}</p>
+  </div>
+
+  <div class="card stat-card">
+    <h3>Total Events</h3>
+    <p>{{ stats.totalEvents }}</p>
+  </div>
+
+  <div class="card stat-card">
+    <h3>Total Registrations</h3>
+    <p>{{ stats.totalRegistrations }}</p>
+  </div>
+
+</div>
+
+<!-- Charts -->
+<div class="charts-grid" *ngIf="!loading">
+
+  <div class="card">
+    <h3>Club Status Distribution</h3>
+    <canvas baseChart
+      [data]="pieChartData"
+      chartType="pie">
+    </canvas>
+  </div>
+
+  <div class="card">
+    <h3>System Overview</h3>
+    <canvas baseChart
+      [data]="barChartData"
+      chartType="bar">
+    </canvas>
+  </div>
+
+</div>

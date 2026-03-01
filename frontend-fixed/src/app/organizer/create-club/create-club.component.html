@@ -1,0 +1,26 @@
+<h2>Create Club</h2>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+
+  <div>
+    <label>Club Name</label>
+    <input type="text" formControlName="clubName" />
+    <div *ngIf="form.get('clubName')?.touched && form.get('clubName')?.invalid">
+      Club Name is required
+    </div>
+  </div>
+
+  <div>
+    <label>Description</label>
+    <textarea formControlName="description"></textarea>
+    <div *ngIf="form.get('description')?.touched && form.get('description')?.invalid">
+      Description is required
+    </div>
+  </div>
+
+  <button type="submit" [disabled]="loading" (click)="submit()">
+    {{ loading ? 'Creating...' : 'Create Club' }}
+    
+  </button>
+  
+</form>

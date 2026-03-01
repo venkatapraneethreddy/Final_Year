@@ -1,0 +1,137 @@
+<div class="dashboard-header">
+  <h1>My Registrations</h1>
+  <p>All events you've registered for.</p>
+</div>
+
+<!-- Loading -->
+<div class="loading-state" *ngIf="loading">
+  <div class="spinner"></div>
+  <p>Loading registrations...</p>
+</div>
+
+<ng-container *ngIf="!loading">
+
+  <!-- Pending payment banner -->
+  <div class="pending-banner" *ngIf="pendingCount > 0">
+    ⚠️ You have <strong>{{ pendingCount }}</strong>
+    registration{{ pendingCount > 1 ? 's' : '' }} awaiting payment.
+    Complete payment to secure your spot.
+  </div>
+
+  <!-- Empty (no registrations at all) -->
+  <div class="empty-state card" *ngIf="registrations.length === 0">
+    <div class="empty-icon">🎟️</div>
+    <h3>No Registrations Yet</h3>
+    <p>Go to the dashboard to discover and register for events.</p>
+  </div>
+
+  <!-- Feature 7: Search + Filter bar -->
+  <div class="filter-bar" *ngIf="registrations.length > 0">
+    <input
+      type="text"
+      placeholder="🔍 Search by event, club, location..."
+      [(ngModel)]="searchTerm"
+      (ngModelChange)="applyFilter()"
+      class="search-input"
+    />
+    <div class="filter-tabs">
+      <button [class.active]="timeFilter === 'all'"
+        (click)="timeFilter='all'; applyFilter()">All</button>
+      <button [class.active]="timeFilter === 'upcoming'"
+        (click)="timeFilter='upcoming'; applyFilter()">Upcoming</button>
+      <button [class.active]="timeFilter === 'past'"
+        (click)="timeFilter='past'; applyFilter()">Past</button>
+    </div>
+    <span class="result-count">{{ filteredRegistrations.length }} result{{ filteredRegistrations.length !== 1 ? 's' : '' }}</span>
+  </div>
+
+  <!-- No results from filter -->
+  <div class="card empty-filter" *ngIf="registrations.length > 0 && filteredRegistrations.length === 0">
+    <p>No registrations match your search.</p>
+  </div>
+
+  <!-- Registration cards -->
+  <div class="registrations-list" *ngIf="filteredRegistrations.length > 0">
+
+    <div class="card registration-card"
+      *ngFor="let reg of filteredRegistrations"
+      [class.pending-payment]="reg.status === 'PENDING_PAYMENT'"
+      [class.past-event]="isPast(reg.event?.eventDate)">
+
+      <div class="reg-info">
+        <div class="reg-title-row">
+          <h3>{{ reg.event?.title }}</h3>
+          <div class="badges">
+            <span class="status-badge confirmed" *ngIf="reg.status === 'CONFIRMED' && !isPast(reg.event?.eventDate)">✓ Confirmed</span>
+            <span class="status-badge pending" *ngIf="reg.status === 'PENDING_PAYMENT'">⏳ Payment Pending</span>
+            <span class="status-badge past" *ngIf="isPast(reg.event?.eventDate)">Event Ended</span>
+          </div>
+        </div>
+        <div class="reg-meta">
+          <span>🏛️ {{ reg.event?.club?.clubName || 'N/A' }}</span>
+          <span>📍 {{ reg.event?.location || 'TBA' }}</span>
+          <span>🗓️ {{ formatDate(reg.event?.eventDate) }}</span>
+          <span class="registered-on">Registered: {{ formatDate(reg.registeredAt) }}</span>
+        </div>
+      </div>
+
+      <div class="reg-actions">
+        <button class="btn-pay"
+          *ngIf="reg.status === 'PENDING_PAYMENT'"
+          (click)="pay(reg.registrationId)"
+          [disabled]="paying.has(reg.registrationId)">
+          {{ paying.has(reg.registrationId) ? 'Processing...' : '💳 Pay ₹' + reg.event?.fee }}
+        </button>
+
+        <button class="btn-ticket"
+          *ngIf="reg.status === 'CONFIRMED'"
+          (click)="openTicket(reg)">
+          🎫 View Ticket
+        </button>
+
+        <button class="btn-cancel"
+          *ngIf="!isPast(reg.event?.eventDate)"
+          (click)="cancelRegistration(reg.registrationId)"
+          [disabled]="cancelling.has(reg.registrationId)">
+          {{ cancelling.has(reg.registrationId) ? 'Cancelling...' : 'Cancel' }}
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</ng-container>
+
+<!-- Ticket Modal -->
+<div class="modal-overlay" *ngIf="selectedRegistration" (click)="closeTicket()">
+  <div class="modal" (click)="$event.stopPropagation()">
+    <button class="modal-close" (click)="closeTicket()">✕</button>
+    <div class="ticket-header">
+      <h2>{{ selectedRegistration.event?.title }}</h2>
+      <span class="ticket-badge">E-Ticket</span>
+    </div>
+    <div class="ticket-meta">
+      <div class="ticket-row">
+        <span class="label">Club</span>
+        <span>{{ selectedRegistration.event?.club?.clubName || 'N/A' }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="label">Location</span>
+        <span>{{ selectedRegistration.event?.location || 'TBA' }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="label">Date</span>
+        <span>{{ formatDate(selectedRegistration.event?.eventDate) }}</span>
+      </div>
+      <div class="ticket-row">
+        <span class="label">Registered</span>
+        <span>{{ formatDate(selectedRegistration.registeredAt) }}</span>
+      </div>
+    </div>
+    <div class="qr-wrapper">
+      <qrcode [qrdata]="selectedRegistration.qrCode" [width]="180" [errorCorrectionLevel]="'M'"></qrcode>
+      <p class="qr-hint">Show this QR code at the event for check-in</p>
+    </div>
+    <button class="btn-close-ticket" (click)="closeTicket()">Close</button>
+  </div>
+</div>

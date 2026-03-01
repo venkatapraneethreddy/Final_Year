@@ -1,0 +1,40 @@
+.dashboard-header {
+  margin-bottom: 30px;
+}
+
+.dashboard-header h1 {
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.dashboard-header p {
+  color: #6b7280;
+  margin-top: 6px;
+}
+
+.club-info {
+  margin-bottom: 30px;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.action-card {
+  flex: 1;
+  min-width: 220px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.empty-state {
+  text-align: center;
+}
